@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>AppController.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AppController.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">app;</span>
+
+<span class="s0">import </span><span class="s1">android.app.Application;</span>
+<span class="s0">import </span><span class="s1">android.text.TextUtils;</span>
+
+<span class="s0">import </span><span class="s1">com.android.volley.Request;</span>
+<span class="s0">import </span><span class="s1">com.android.volley.RequestQueue;</span>
+<span class="s0">import </span><span class="s1">com.android.volley.toolbox.Volley;</span>
+
+<span class="s0">public class </span><span class="s1">AppController </span><span class="s0">extends </span><span class="s1">Application {</span>
+
+    <span class="s0">public static final </span><span class="s1">String TAG = AppController.</span><span class="s0">class</span><span class="s1">.getSimpleName();</span>
+
+    <span class="s0">private </span><span class="s1">RequestQueue mRequestQueue;</span>
+
+    <span class="s0">private static </span><span class="s1">AppController mInstance;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onCreate() {</span>
+        <span class="s0">super</span><span class="s1">.onCreate();</span>
+        <span class="s1">mInstance = </span><span class="s0">this</span><span class="s1">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public static synchronized </span><span class="s1">AppController getInstance() {</span>
+        <span class="s0">return </span><span class="s1">mInstance;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">RequestQueue getRequestQueue() {</span>
+        <span class="s0">if </span><span class="s1">(mRequestQueue == </span><span class="s0">null</span><span class="s1">) {</span>
+            <span class="s1">mRequestQueue = Volley.newRequestQueue(getApplicationContext());</span>
+        <span class="s1">}</span>
+
+        <span class="s0">return </span><span class="s1">mRequestQueue;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">&lt;T&gt; </span><span class="s0">void </span><span class="s1">addToRequestQueue(Request&lt;T&gt; req, String tag) {</span>
+        <span class="s1">req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);</span>
+        <span class="s1">getRequestQueue().add(req);</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">&lt;T&gt; </span><span class="s0">void </span><span class="s1">addToRequestQueue(Request&lt;T&gt; req) {</span>
+        <span class="s1">req.setTag(TAG);</span>
+        <span class="s1">getRequestQueue().add(req);</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">cancelPendingRequests(Object tag) {</span>
+        <span class="s0">if </span><span class="s1">(mRequestQueue != </span><span class="s0">null</span><span class="s1">) {</span>
+            <span class="s1">mRequestQueue.cancelAll(tag);</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

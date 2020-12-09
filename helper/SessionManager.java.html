@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>SessionManager.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #1750eb;}
+.s4 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SessionManager.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">helper;</span>
+
+<span class="s0">import </span><span class="s1">android.content.Context;</span>
+<span class="s0">import </span><span class="s1">android.content.SharedPreferences;</span>
+<span class="s0">import </span><span class="s1">android.content.SharedPreferences.Editor;</span>
+<span class="s0">import </span><span class="s1">android.util.Log;</span>
+
+<span class="s0">public class </span><span class="s1">SessionManager {</span>
+    <span class="s2">// LogCat tag</span>
+    <span class="s0">private static </span><span class="s1">String TAG = SessionManager.</span><span class="s0">class</span><span class="s1">.getSimpleName();</span>
+
+    <span class="s2">// Shared Preferences</span>
+    <span class="s1">SharedPreferences pref;</span>
+
+    <span class="s1">Editor editor;</span>
+    <span class="s1">Context _context;</span>
+
+    <span class="s2">// Shared pref mode</span>
+    <span class="s0">int </span><span class="s1">PRIVATE_MODE = </span><span class="s3">0</span><span class="s1">;</span>
+
+    <span class="s2">// Shared preferences file name</span>
+    <span class="s0">private static final </span><span class="s1">String PREF_NAME = </span><span class="s4">&quot;AndroidHiveLogin&quot;</span><span class="s1">;</span>
+
+    <span class="s0">private static final </span><span class="s1">String KEY_IS_LOGGEDIN = </span><span class="s4">&quot;isLoggedIn&quot;</span><span class="s1">;</span>
+
+    <span class="s0">public </span><span class="s1">SessionManager(Context context) {</span>
+        <span class="s0">this</span><span class="s1">._context = context;</span>
+        <span class="s1">pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);</span>
+        <span class="s1">editor = pref.edit();</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setLogin(</span><span class="s0">boolean </span><span class="s1">isLoggedIn) {</span>
+
+        <span class="s1">editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);</span>
+
+        <span class="s2">// commit changes</span>
+        <span class="s1">editor.commit();</span>
+
+        <span class="s1">Log.d(TAG, </span><span class="s4">&quot;User login session modified!&quot;</span><span class="s1">);</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public boolean </span><span class="s1">isLoggedIn(){</span>
+        <span class="s0">return </span><span class="s1">pref.getBoolean(KEY_IS_LOGGEDIN, </span><span class="s0">false</span><span class="s1">);</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

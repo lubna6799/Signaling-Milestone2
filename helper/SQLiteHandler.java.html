@@ -1,0 +1,144 @@
+<html>
+<head>
+<title>SQLiteHandler.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #1750eb;}
+.s4 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SQLiteHandler.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">helper;</span>
+
+<span class="s0">import </span><span class="s1">android.content.ContentValues;</span>
+<span class="s0">import </span><span class="s1">android.content.Context;</span>
+<span class="s0">import </span><span class="s1">android.database.Cursor;</span>
+<span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase;</span>
+<span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteOpenHelper;</span>
+<span class="s0">import </span><span class="s1">android.util.Log;</span>
+
+<span class="s0">import </span><span class="s1">java.util.HashMap;</span>
+
+<span class="s0">public class </span><span class="s1">SQLiteHandler </span><span class="s0">extends </span><span class="s1">SQLiteOpenHelper {</span>
+
+    <span class="s0">private static final </span><span class="s1">String TAG = SQLiteHandler.</span><span class="s0">class</span><span class="s1">.getSimpleName();</span>
+
+    <span class="s2">// All Static variables</span>
+    <span class="s2">// Database Version</span>
+    <span class="s0">private static final int </span><span class="s1">DATABASE_VERSION = </span><span class="s3">1</span><span class="s1">;</span>
+
+    <span class="s2">// Database Name</span>
+    <span class="s0">private static final </span><span class="s1">String DATABASE_NAME = </span><span class="s4">&quot;android_api&quot;</span><span class="s1">;</span>
+
+    <span class="s2">// Login table name</span>
+    <span class="s0">private static final </span><span class="s1">String TABLE_USER = </span><span class="s4">&quot;user&quot;</span><span class="s1">;</span>
+
+    <span class="s2">// Login Table Columns names</span>
+    <span class="s0">private static final </span><span class="s1">String KEY_ID = </span><span class="s4">&quot;id&quot;</span><span class="s1">;</span>
+    <span class="s0">private static final </span><span class="s1">String KEY_NAME = </span><span class="s4">&quot;name&quot;</span><span class="s1">;</span>
+    <span class="s0">private static final </span><span class="s1">String KEY_EMAIL = </span><span class="s4">&quot;email&quot;</span><span class="s1">;</span>
+    <span class="s0">private static final </span><span class="s1">String KEY_UID = </span><span class="s4">&quot;uid&quot;</span><span class="s1">;</span>
+    <span class="s0">private static final </span><span class="s1">String KEY_CREATED_AT = </span><span class="s4">&quot;created_at&quot;</span><span class="s1">;</span>
+    <span class="s0">private static final </span><span class="s1">String KEY_ADDRESS= </span><span class="s4">&quot;Address&quot;</span><span class="s1">;</span>
+    <span class="s0">private static final </span><span class="s1">String KEY_PHONE = </span><span class="s4">&quot;phone&quot;</span><span class="s1">;</span>
+
+
+    <span class="s0">public </span><span class="s1">SQLiteHandler(Context context) {</span>
+        <span class="s0">super</span><span class="s1">(context, DATABASE_NAME, </span><span class="s0">null</span><span class="s1">, DATABASE_VERSION);</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Creating Tables</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onCreate(SQLiteDatabase db) {</span>
+        <span class="s1">String CREATE_LOGIN_TABLE = </span><span class="s4">&quot;CREATE TABLE &quot; </span><span class="s1">+ TABLE_USER + </span><span class="s4">&quot;(&quot;</span>
+                <span class="s1">+ KEY_ID + </span><span class="s4">&quot; INTEGER PRIMARY KEY,&quot; </span><span class="s1">+ KEY_NAME + </span><span class="s4">&quot; TEXT,&quot;</span>
+                <span class="s1">+ KEY_EMAIL + </span><span class="s4">&quot; TEXT UNIQUE,&quot; </span><span class="s1">+ KEY_UID + </span><span class="s4">&quot; TEXT,&quot;</span>
+                <span class="s1">+ KEY_ADDRESS + </span><span class="s4">&quot; TEXT,&quot; </span><span class="s1">+ KEY_PHONE + </span><span class="s4">&quot; TEXT,&quot; </span><span class="s1">+KEY_CREATED_AT + </span><span class="s4">&quot; TEXT&quot; </span><span class="s1">+ </span><span class="s4">&quot;)&quot;</span><span class="s1">;</span>
+        <span class="s1">db.execSQL(CREATE_LOGIN_TABLE);</span>
+
+        <span class="s1">Log.d(TAG, </span><span class="s4">&quot;Database tables created&quot;</span><span class="s1">);</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Upgrading database</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onUpgrade(SQLiteDatabase db, </span><span class="s0">int </span><span class="s1">oldVersion, </span><span class="s0">int </span><span class="s1">newVersion) {</span>
+        <span class="s2">// Drop older table if existed</span>
+        <span class="s1">db.execSQL(</span><span class="s4">&quot;DROP TABLE IF EXISTS &quot; </span><span class="s1">+ TABLE_USER);</span>
+
+        <span class="s2">// Create tables again</span>
+        <span class="s1">onCreate(db);</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/**</span>
+     <span class="s2">* Storing user details in database</span>
+     <span class="s2">* */</span>
+    <span class="s0">public void </span><span class="s1">addUser(String name, String email, String uid, String created_at, String address, String phone) {</span>
+        <span class="s1">SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase();</span>
+
+        <span class="s1">ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues();</span>
+        <span class="s1">values.put(KEY_NAME, name); </span><span class="s2">// Name</span>
+        <span class="s1">values.put(KEY_EMAIL, email); </span><span class="s2">// Email</span>
+        <span class="s1">values.put(KEY_UID, uid); </span><span class="s2">// Email</span>
+        <span class="s1">values.put(KEY_CREATED_AT, created_at); </span><span class="s2">// Created At</span>
+        <span class="s1">values.put(KEY_ADDRESS,address);</span>
+        <span class="s1">values.put(KEY_PHONE,phone);</span>
+
+        <span class="s2">// Inserting Row</span>
+        <span class="s0">long </span><span class="s1">id = db.insert(TABLE_USER, </span><span class="s0">null</span><span class="s1">, values);</span>
+        <span class="s1">db.close(); </span><span class="s2">// Closing database connection</span>
+
+        <span class="s1">Log.d(TAG, </span><span class="s4">&quot;New user inserted into sqlite: &quot; </span><span class="s1">+ id);</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/**</span>
+     <span class="s2">* Getting user data from database</span>
+     <span class="s2">* */</span>
+    <span class="s0">public </span><span class="s1">HashMap&lt;String, String&gt; getUserDetails() {</span>
+        <span class="s1">HashMap&lt;String, String&gt; user = </span><span class="s0">new </span><span class="s1">HashMap&lt;String, String&gt;();</span>
+        <span class="s1">String selectQuery = </span><span class="s4">&quot;SELECT  * FROM &quot; </span><span class="s1">+ TABLE_USER;</span>
+
+        <span class="s1">SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase();</span>
+        <span class="s1">Cursor cursor = db.rawQuery(selectQuery, </span><span class="s0">null</span><span class="s1">);</span>
+        <span class="s2">// Move to first row</span>
+        <span class="s1">cursor.moveToFirst();</span>
+        <span class="s0">if </span><span class="s1">(cursor.getCount() &gt; </span><span class="s3">0</span><span class="s1">) {</span>
+            <span class="s1">user.put(</span><span class="s4">&quot;name&quot;</span><span class="s1">, cursor.getString(</span><span class="s3">1</span><span class="s1">));</span>
+            <span class="s1">user.put(</span><span class="s4">&quot;email&quot;</span><span class="s1">, cursor.getString(</span><span class="s3">2</span><span class="s1">));</span>
+            <span class="s1">user.put(</span><span class="s4">&quot;uid&quot;</span><span class="s1">, cursor.getString(</span><span class="s3">3</span><span class="s1">));</span>
+            <span class="s1">user.put(</span><span class="s4">&quot;created_at&quot;</span><span class="s1">, cursor.getString(</span><span class="s3">4</span><span class="s1">));</span>
+            <span class="s1">user.put(</span><span class="s4">&quot;Address&quot;</span><span class="s1">, cursor.getString(</span><span class="s3">5</span><span class="s1">));</span>
+            <span class="s1">user.put(</span><span class="s4">&quot;phone&quot;</span><span class="s1">, cursor.getString(</span><span class="s3">6</span><span class="s1">));</span>
+        <span class="s1">}</span>
+        <span class="s1">cursor.close();</span>
+        <span class="s1">db.close();</span>
+        <span class="s2">// return user</span>
+        <span class="s1">Log.d(TAG, </span><span class="s4">&quot;Fetching user from Sqlite: &quot; </span><span class="s1">+ user.toString());</span>
+
+        <span class="s0">return </span><span class="s1">user;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/**</span>
+     <span class="s2">* Re crate database Delete all tables and create them again</span>
+     <span class="s2">* */</span>
+    <span class="s0">public void </span><span class="s1">deleteUsers() {</span>
+        <span class="s1">SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase();</span>
+        <span class="s2">// Delete All Rows</span>
+        <span class="s1">db.delete(TABLE_USER, </span><span class="s0">null</span><span class="s1">, </span><span class="s0">null</span><span class="s1">);</span>
+        <span class="s1">db.close();</span>
+
+        <span class="s1">Log.d(TAG, </span><span class="s4">&quot;Deleted all user info from sqlite&quot;</span><span class="s1">);</span>
+    <span class="s1">}</span>
+
+<span class="s1">}</span>
+
+</pre>
+</body>
+</html>
