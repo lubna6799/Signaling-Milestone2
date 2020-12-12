@@ -144,7 +144,7 @@ public class LoginActivity extends Activity {
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
+                                ProductActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
